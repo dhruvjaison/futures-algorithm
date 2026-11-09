@@ -1,0 +1,5 @@
+# /etc/systemd/system/trader@<book>.service.d/go-live.conf
+# Present = live orders. Absent = dry run (orders are computed and logged, never sent).
+[Service]
+ExecStart=
+ExecStart=/opt/trader/.venv/bin/python -m trader.run --book %i --go-live

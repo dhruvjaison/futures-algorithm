@@ -1,0 +1,11 @@
+# Starts the book shortly before the session on weekdays. The ExecStartPre guard
+# disarms holidays and early closes, so the timer itself stays simple.
+[Unit]
+Description=Start strategy executor (%i) before the session
+
+[Timer]
+OnCalendar=Mon..Fri 07:55 America/Chicago
+Persistent=false
+
+[Install]
+WantedBy=timers.target

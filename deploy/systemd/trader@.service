@@ -1,0 +1,18 @@
+# Example unit (sanitized). One instance per strategy book.
+# The bot runs DRY-RUN by default; a separate drop-in (go-live.conf) adds --go-live,
+# so arming and disarming a book is a single file plus `systemctl daemon-reload`.
+[Unit]
+Description=Futures strategy executor (%i)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/trader
+EnvironmentFile=/opt/trader/.env.%i
+ExecStartPre=/opt/trader/.venv/bin/python -m trader.guard --book %i
+ExecStart=/opt/trader/.venv/bin/python -m trader.run --book %i
+# Never restart into a live session: a cold start mid-session would rebuild its
+# state (for example an opening range) from partial data.
+Restart=no
+TimeoutStopSec=120
